@@ -67,6 +67,8 @@ country_timezone_map = {
 country = st.sidebar.selectbox("Select Country:", list(country_timezone_map.keys()))
 time_format = st.sidebar.radio("Select Time Format:", ["24-hour", "12-hour"])
 
+# ... rest of your code above ...
+
 st.title("🌍 World Clock")
 
 tz = pytz.timezone(country_timezone_map[country])
@@ -82,11 +84,12 @@ def get_current_time():
 # Live clock updating every second (for 60 seconds)
 for _ in range(60):
     current_time = get_current_time()
-    clock_placeholder.markdown(f"### Current time in **{country}**")
+    clock_placeholder.markdown(f"### Current time in **{country}** is:")
     clock_placeholder.markdown(
         f"<h2 style='font-weight:600;'>{current_time}</h2>", unsafe_allow_html=True
     )
     time.sleep(1)
 
+# Footer
 st.markdown("---")
 st.markdown("<p style='text-align:center;'>Made with ❤️ by Aarav Shah</p>", unsafe_allow_html=True)
