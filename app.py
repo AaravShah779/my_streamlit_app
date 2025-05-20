@@ -1,63 +1,30 @@
 import streamlit as st
-from datetime import datetime
-import pytz
-from streamlit_autorefresh import st_autorefresh
 import streamlit.components.v1 as components
 
-# Page setup
-st.set_page_config(page_title="World Clock", layout="centered")
+st.title("🌍 Simple Rotating Globe")
 
-# Auto-refresh every 1 second
-st_autorefresh(interval=1000, limit=None, key="auto_refresh")
-
-st.title("🌍 World Clock")
-
-# --- Country to timezone mapping ---
-country_timezone_map = {
-    "India": "Asia/Kolkata",
-    "United States (Eastern)": "US/Eastern",
-    "United States (Pacific)": "US/Pacific",
-    "United Kingdom": "Europe/London",
-    "Germany": "Europe/Berlin",
-    "Japan": "Asia/Tokyo",
-    "Australia": "Australia/Sydney",
-    "Brazil": "America/Sao_Paulo",
-    "UAE": "Asia/Dubai",
-    "South Africa": "Africa/Johannesburg",
+country_coords = {
+    "India": [78.9629, 20.5937],
+    "United States (Eastern)": [-75.1652, 39.9526],
+    "United States (Pacific)": [-122.4194, 37.7749],
+    "United Kingdom": [-0.1276, 51.5074],
+    "Germany": [13.4050, 52.5200],
+    "Japan": [139.6917, 35.6895],
+    "Australia": [151.2093, -33.8688],
+    "Brazil": [-47.8825, -15.7942],
+    "UAE": [54.3773, 24.4539],
+    "South Africa": [28.0473, -26.2041],
 }
 
-# --- User selections ---
-st.sidebar.header("Settings")
+country = st.selectbox("Select Country:", list(country_coords.keys()))
 
-country = st.sidebar.selectbox("Select your country:", list(country_timezone_map.keys()))
-time_format = st.sidebar.radio("Select time format:", ["24-hour", "12-hour"])
+st.markdown(f"Selected country: **{country}**")
 
-# Store selections
-st.session_state["timezone"] = country_timezone_map[country]
-st.session_state["format_24hr"] = time_format == "24-hour"
+# Read the globe html file and embed it
+with open("globe.html", "r") as f:
+    globe_html = f.read()
 
-# --- Time Display ---
-st.subheader(f"🕒 Current Time in {country}")
-tz = pytz.timezone(st.session_state["timezone"])
-now = datetime.now(tz)
-
-if st.session_state["format_24hr"]:
-    formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
-else:
-    formatted_time = now.strftime("%Y-%m-%d %I:%M:%S %p")
-
-st.markdown(f"### {formatted_time}")
-
-# --- Interactive Globe ---
-st.markdown("---")
-st.subheader("🌐 Real-Time Day/Night Globe")
-
-# Embed iframe from timeanddate.com
-components.iframe(
-    "https://www.timeanddate.com/worldclock/sunearth.html",
-    height=500,
-    scrolling=True
-)
+components.html(globe_html, height=600)
 
 # --- Footer ---
 st.markdown("---")
