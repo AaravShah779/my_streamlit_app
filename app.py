@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 import pytz
 from streamlit_autorefresh import st_autorefresh
+import streamlit.components.v1 as components
 
 # Page setup
 st.set_page_config(page_title="World Clock", layout="centered")
@@ -47,6 +48,17 @@ else:
 
 st.markdown(f"### {formatted_time}")
 
+# --- Interactive Globe ---
+st.markdown("---")
+st.subheader("🌐 Real-Time Day/Night Globe")
+
+# Embed iframe from timeanddate.com
+components.iframe(
+    "https://www.timeanddate.com/worldclock/sunearth.html",
+    height=500,
+    scrolling=True
+)
+
 # --- Footer ---
 st.markdown("---")
-st.markdown("*Made with ❤️ by Aarav Shah*")
+st.markdown("*Built with Streamlit*")
