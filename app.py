@@ -49,4 +49,4 @@ st.markdown(f"### {formatted_time}")
 
 # --- Footer ---
 st.markdown("---")
-st.markdown("*Built with Streamlit*")
+st.markdown("*Made with ❤️ by Aarav Shah*")
