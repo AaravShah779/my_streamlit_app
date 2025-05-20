@@ -73,4 +73,12 @@ def get_current_time():
         return now.strftime("%Y-%m-%d %I:%M:%S %p")
 
 # Live updating clock loop (will update for 1 minute)
-for _ in range(_
+for _ in range(60):
+    current_time = get_current_time()
+    clock_placeholder.markdown(f"### Current time in **{country}**")
+    clock_placeholder.markdown(f"<h2 style='font-weight:600;'>{current_time}</h2>", unsafe_allow_html=True)
+    time.sleep(1)
+
+# Footer
+st.markdown("---")
+st.markdown("<p style='text-align:center;'>Made with ❤️ by Aarav Shah</p>", unsafe_allow_html=True)
