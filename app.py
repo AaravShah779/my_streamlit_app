@@ -1,31 +1,73 @@
 import streamlit as st
-import streamlit.components.v1 as components
+from datetime import datetime
+import pytz
 
-st.title("🌍 Simple Rotating Globe")
+# Page config with dynamic theme
+st.set_page_config(
+    page_title="World Clock",
+    layout="centered",
+)
 
-country_coords = {
-    "India": [78.9629, 20.5937],
-    "United States (Eastern)": [-75.1652, 39.9526],
-    "United States (Pacific)": [-122.4194, 37.7749],
-    "United Kingdom": [-0.1276, 51.5074],
-    "Germany": [13.4050, 52.5200],
-    "Japan": [139.6917, 35.6895],
-    "Australia": [151.2093, -33.8688],
-    "Brazil": [-47.8825, -15.7942],
-    "UAE": [54.3773, 24.4539],
-    "South Africa": [28.0473, -26.2041],
+# Light/Dark mode toggle
+theme = st.sidebar.radio("Select Theme:", ["Light", "Dark"])
+if theme == "Dark":
+    st.markdown(
+        """
+        <style>
+        body, .css-18e3th9 {background-color: #0e1117; color: white;}
+        .stButton>button {background-color: #1e2127; color: white;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+else:
+    st.markdown(
+        """
+        <style>
+        body, .css-18e3th9 {background-color: white; color: black;}
+        .stButton>button {background-color: #f0f2f6; color: black;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+st.title("🌍 World Clock")
+
+# List of countries and their main timezones
+country_timezone_map = {
+    "India": "Asia/Kolkata",
+    "United States (Eastern)": "US/Eastern",
+    "United States (Pacific)": "US/Pacific",
+    "United Kingdom": "Europe/London",
+    "Germany": "Europe/Berlin",
+    "Japan": "Asia/Tokyo",
+    "Australia": "Australia/Sydney",
+    "Brazil": "America/Sao_Paulo",
+    "UAE": "Asia/Dubai",
+    "South Africa": "Africa/Johannesburg",
+    "China": "Asia/Shanghai",
+    "Russia (Moscow)": "Europe/Moscow",
+    "France": "Europe/Paris",
+    "Canada (Eastern)": "Canada/Eastern",
+    "Mexico": "America/Mexico_City",
 }
 
-country = st.selectbox("Select Country:", list(country_coords.keys()))
+# Sidebar controls
+country = st.sidebar.selectbox("Select Country:", list(country_timezone_map.keys()))
+time_format = st.sidebar.radio("Select Time Format:", ["24-hour", "12-hour"])
 
-st.markdown(f"Selected country: **{country}**")
+# Fetch current time in chosen timezone
+tz = pytz.timezone(country_timezone_map[country])
+now = datetime.now(tz)
 
-# Read the globe html file and embed it
-with open("globe.html", "r") as f:
-    globe_html = f.read()
+if time_format == "24-hour":
+    current_time = now.strftime("%Y-%m-%d %H:%M:%S")
+else:
+    current_time = now.strftime("%Y-%m-%d %I:%M:%S %p")
 
-components.html(globe_html, height=600)
+st.markdown(f"### Current time in **{country}**")
+st.markdown(f"<h2 style='font-weight:600;'>{current_time}</h2>", unsafe_allow_html=True)
 
-# --- Footer ---
+# Footer
 st.markdown("---")
-st.markdown("*Built with Streamlit*")
+st.markdown("<p style='text-align:center;'>Made with ❤️ by Aarav Shah</p>", unsafe_allow_html=True)
