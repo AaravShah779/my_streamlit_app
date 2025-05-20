@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Simple Interactive Globe</title>
+<style>
+  body { margin: 0; overflow: hidden; }
+  #globeViz { width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<div id="globeViz"></div>
+
+<script src="https://unpkg.com/three@0.130.1/build/three.min.js"></script>
+<script src="https://unpkg.com/three-globe"></script>
+<script src="https://unpkg.com/d3@5"></script>
+<script src="https://unpkg.com/react-globe.gl"></script>
+
+<script>
+// Minimal globe setup using three-globe
+const Globe = new ThreeGlobe()
+  .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+  .arcsData([])
+  .labelsData([]);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById('globeViz').appendChild(renderer.domElement);
+
+camera.position.z = 300;
+
+scene.add(Globe);
+
+function animate() {
+  Globe.rotation.y += 0.002;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
